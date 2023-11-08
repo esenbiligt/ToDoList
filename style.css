@@ -1,0 +1,14 @@
+*{margin: 0}
+.container{
+    height: fit-content;
+}
+.form{
+    width: 300px;
+    height: fit-content;
+    min-height: 300px;
+    background-color: pink;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
