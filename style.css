@@ -1,4 +1,8 @@
 *{margin: 0}
+body{
+    display: flex;
+    justify-content: space-around;
+}
 .container{
     height: fit-content;
 }
@@ -11,4 +15,44 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: absolute;
+    top: 35%;
+    left: 42%
+}
+
+.board{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 20vw;
+    min-height: 10vh;
+    height: fit-content;
+    background-color: lightblue;
+    border: 1px solid black;
+    padding: 1vh;
+}
+
+.cardContainer{
+    min-height: 3vh;
+    height: fit-content;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+.cardDiv{
+    height: fit-content ;
+    display: flex;
+    justify-content: space-between;
+}
+.cardContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.editNremove{
+    display: flex;
+    flex-direction: column;
 }
