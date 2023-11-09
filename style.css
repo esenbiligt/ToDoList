@@ -56,3 +56,9 @@ body{
     display: flex;
     flex-direction: column;
 }
+
+.printCards{
+    position: absolute;
+    top: 70%;
+    left: 35%;
+}

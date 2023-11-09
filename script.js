@@ -9,24 +9,91 @@ class Card {
   }
 }
 
-const toDoCards = [];
-const doingCards = [];
-const stuckCards = [];
-const doneCards = [];
+let toDoCards = [];
+let doingCards = [];
+let stuckCards = [];
+let doneCards = [];
 
 function printCards() {
-  console.log("todo: ", toDoCards);
-  console.log("doing: ", doingCards);
-  console.log("stuck: ", stuckCards);
-  console.log("done: ", doneCards);
-  console.log("-----------------------------");
+  let printCards = document.createElement("button");
+  printCards.className = "printCards";
+  printCards.id = "printCards";
+  printCards.innerText = "Print Arrays";
+  printCards.addEventListener("click", () => {
+    console.log("-----------------------------");
+    console.log("todo: ", toDoCards);
+    console.log("doing: ", doingCards);
+    console.log("stuck: ", stuckCards);
+    console.log("done: ", doneCards);
+    console.log("-----------------------------");
+  });
+  body.appendChild(printCards);
+}
+
+function countCards(status) {
+  let id = "cardContainer" + status;
+  let titleId = "title" + status;
+  let count = document.getElementById(id).childElementCount;
+  document.getElementById(titleId).innerText = count;
+}
+
+function sortArray(status) {
+  let high = [];
+  let medium = [];
+  let low = [];
+  let arr = [];
+  switch (status) {
+    case "toDo":
+      arr = toDoCards;
+      break;
+    case "doing":
+      arr = doingCards;
+      break;
+    case "stuck":
+      arr = stuckCards;
+      break;
+    case "done":
+      arr = doneCards;
+      break;
+  }
+  for (let i = 0; i < arr.length; i++) {
+    let priority = arr[i].priority;
+    switch (priority) {
+      case "high":
+        high.push(i);
+        break;
+      case "medium":
+        medium.push(i);
+        break;
+      case "low":
+        low.push(i);
+        break;
+    }
+  }
+  let sort = high.concat(medium, low);
+  switch (status) {
+    case "toDo":
+      toDoCards = sort.map((i) => toDoCards[i]);
+      break;
+    case "doing":
+      doingCards = sort.map((i) => doingCards[i]);
+      break;
+    case "stuck":
+      stuckCards = sort.map((i) => stuckCards[i]);
+      break;
+    case "done":
+      doneCards = sort.map((i) => doneCards[i]);
+      break;
+  }
 }
 
 function createBoard(statusName, status) {
   let board = document.createElement("div");
+  let id = "cardContainer" + status;
   board.className = "board";
-  board.innerHTML = `      <h1>${statusName}</h1>
-  <div class="cardContainer" id='cardContainer${status}'></div>
+  board.innerHTML = `
+  <h1>${statusName} <span id='title${status}'>0</span></h1>
+  <div class="cardContainer" id='${id}'></div>
   <button id="addTask${status}">Add Task</button>`;
   body.appendChild(board);
   document.getElementById(`addTask${status}`).addEventListener("click", () => {
@@ -111,6 +178,7 @@ function createAddTask() {
         }
         document.getElementById("addTask").remove();
         drawCards(values[3]);
+        countCards(values[3]);
         printCards();
       }
     }
@@ -118,6 +186,7 @@ function createAddTask() {
 }
 
 function drawCards(status) {
+  sortArray(status);
   let id = "cardContainer" + status;
   let arr = [];
   switch (status) {
@@ -151,11 +220,15 @@ function drawCards(status) {
     doneButton.innerText = "D";
     doneButton.addEventListener("click", () => {
       let pushIndex = Array.from(cardDiv.parentNode.children).indexOf(cardDiv);
-      document.getElementById("cardContainerdone").appendChild(cardDiv);
+      let tempStatus = arr[pushIndex].status;
       doneCards.push(arr[pushIndex]);
-      arr[pushIndex].status = "done";
+      doneCards[doneCards.length - 1].status = "done";
       arr.splice(pushIndex, 1);
+      cardDiv.remove();
       printCards();
+      drawCards("done");
+      countCards(tempStatus);
+      countCards("done");
     });
     cardDiv.prepend(doneButton);
     let editNremove = document.createElement("div");
@@ -168,11 +241,13 @@ function drawCards(status) {
       let deleteIndex = Array.from(cardDiv.parentNode.children).indexOf(
         cardDiv
       );
-      console.log(deleteIndex);
+      let tempStatus = arr[deleteIndex].status;
+      // console.log(deleteIndex);
       cardDiv.remove();
       arr.splice(deleteIndex, 1);
-      console.log(arr);
+      // console.log(arr);
       printCards();
+      countCards(tempStatus);
     });
     editNremove.appendChild(removeButton);
     let editButton = document.createElement("button");
@@ -191,6 +266,7 @@ function drawCards(status) {
       document.getElementById("statusSelect").value = arr[index].status;
       document.getElementById("prioritySelect").value = arr[index].priority;
       document.getElementById("addCardButton").addEventListener("click", () => {
+        let tempStatus = arr[index].status;
         if (
           document.getElementById("titleInput").value == "" ||
           document.getElementById("descriptionInput").value == ""
@@ -199,11 +275,17 @@ function drawCards(status) {
           document.getElementById("descriptionInput").placeholder =
             "cannot be empty";
         } else {
-          console.log("status: ", arr[index].status);
-          console.log("arr: ", { arr });
+          // console.log("status: ", arr[index].status);
+          // console.log("arr: ", { arr });
+          // console.log(
+          //   arr[index].status,
+          //   document.getElementById("statusSelect").value
+          // );
           if (
             arr[index].status != document.getElementById("statusSelect").value
           ) {
+            // console.log("reach");
+            arr[index].status = document.getElementById("statusSelect").value;
             switch (arr[index].status) {
               case "toDo":
                 toDoCards.push(arr[index]);
@@ -234,13 +316,16 @@ function drawCards(status) {
             document.getElementById("descriptionInput").value;
           arr[index].status = document.getElementById("statusSelect").value;
           arr[index].priority = document.getElementById("prioritySelect").value;
-          console.log(
-            "new-status: ",
-            document.getElementById("statusSelect").value
-          );
-          console.log("new-arr: ", { arr });
+          // console.log(
+          //   "new-status: ",
+          //   document.getElementById("statusSelect").value
+          // );
+          // console.log("new-arr: ", { arr });
           drawCards(arr[index].status);
+          countCards(tempStatus);
+          countCards(arr[index].status);
           document.getElementById("addTask").remove();
+          printCards();
         }
       });
       printCards();
@@ -256,6 +341,7 @@ function initialize() {
   for (let i = 0; i < statusList.length; i++) {
     createBoard(statusName[i], statusList[i]);
   }
+  printCards();
 }
 
 initialize();
