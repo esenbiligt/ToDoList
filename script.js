@@ -1,7 +1,7 @@
 let body = document.querySelector("body");
 
-let dragMe;
-let dragMeArr;
+let dragMeDiv;
+let dragMeCard;
 
 class Card {
   constructor(title, description, priority, status) {
@@ -95,7 +95,7 @@ function createBoard(statusName, status) {
   let id = "cardContainer" + status;
   board.className = "board";
   board.innerHTML = `
-  <h1>${statusName} <span id='title${status}'>0</span></h1>
+  <h1>${statusName}: <span id='title${status}'>0</span></h1>
   <div class="cardContainer" id='${id}'></div>
   <button id="addTask${status}">Add Task</button>`;
   body.appendChild(board);
@@ -109,7 +109,7 @@ function createBoard(statusName, status) {
   });
   document.getElementById(id).addEventListener("drop", (event) => {
     event.preventDefault();
-    let index = Array.from(dragMe.parentNode.children).indexOf(dragMe);
+    // let index = Array.from(dragMeDiv.parentNode.children).indexOf(dragMeDiv);
     let tempStatus = dragMeCard.status;
     let arr;
     let prevArr;
@@ -150,6 +150,8 @@ function createBoard(statusName, status) {
     prevArr.splice(deleteIndex, 1);
     drawCards(tempStatus);
     drawCards(arr[arr.length - 1].status);
+    // console.log(tempStatus);
+    // console.log(arr[arr.length - 1].status);
   });
   document.getElementById(id).addEventListener("dragover", (event) => {
     event.preventDefault();
@@ -233,7 +235,7 @@ function createAddTask() {
         document.getElementById("addTask").remove();
         drawCards(values[3]);
         countCards(values[3]);
-        printCards();
+        // printCards();
       }
     }
   });
@@ -273,11 +275,26 @@ function drawCards(status) {
     `;
     cardDiv.addEventListener("dragstart", (event) => {
       // console.log("dragged");
-      dragMe = event.target;
+      dragMeDiv = event.target;
       // console.log(dragMe);
-      let index = Array.from(dragMe.parentNode.children).indexOf(dragMe);
+      let index = Array.from(dragMeDiv.parentNode.children).indexOf(dragMeDiv);
+      switch (status) {
+        case "toDo":
+          arr = toDoCards;
+          break;
+        case "doing":
+          arr = doingCards;
+          break;
+        case "stuck":
+          arr = stuckCards;
+          break;
+        case "done":
+          arr = doneCards;
+          break;
+      }
       dragMeCard = arr[index];
-      // console.log(dragMe);
+      // console.log("a", arr, dragMeCard);
+      // console.log(dragMeDiv);
     });
     let doneButton = document.createElement("button");
     doneButton.class = "doneButton";
@@ -289,7 +306,7 @@ function drawCards(status) {
       doneCards[doneCards.length - 1].status = "done";
       arr.splice(pushIndex, 1);
       cardDiv.remove();
-      printCards();
+      // printCards();
       drawCards("done");
       countCards(tempStatus);
       countCards("done");
@@ -310,7 +327,7 @@ function drawCards(status) {
       cardDiv.remove();
       arr.splice(deleteIndex, 1);
       // console.log(arr);
-      printCards();
+      // printCards();
       countCards(tempStatus);
     });
     editNremove.appendChild(removeButton);
@@ -406,20 +423,20 @@ function drawCards(status) {
           countCards(tempStatus);
           countCards(arr[index].status);
           document.getElementById("addTask").remove();
-          printCards();
+          // printCards();
         }
       });
-      printCards();
+      // printCards();
     });
     editNremove.appendChild(editButton);
     document.getElementById(id).appendChild(cardDiv);
-    countCards(status);
   }
+  countCards(status);
 }
 
 function initialize() {
   const statusList = ["toDo", "doing", "stuck", "done"];
-  const statusName = ["To-do", "Doing", "Stuck", "Done"];
+  const statusName = ["To do", "Doing", "Stuck", "Done"];
   for (let i = 0; i < statusList.length; i++) {
     createBoard(statusName[i], statusList[i]);
   }
