@@ -256,7 +256,23 @@ function drawCards(status) {
     editButton.addEventListener("click", () => {
       createAddTask();
       let index = Array.from(cardDiv.parentNode.children).indexOf(cardDiv);
+      // console.log(cardDiv);
       isEdit = true;
+      switch (status) {
+        case "toDo":
+          arr = toDoCards;
+          break;
+        case "doing":
+          arr = doingCards;
+          break;
+        case "stuck":
+          arr = stuckCards;
+          break;
+        case "done":
+          arr = doneCards;
+          break;
+      }
+      // console.log(arr);
       document.getElementById("addTask").style.backgroundColor = "lightblue";
       document.querySelector("h2").innerText = "Edit Task";
       document.getElementById("addCardButton").innerText = "Edit Card";
@@ -322,6 +338,7 @@ function drawCards(status) {
           // );
           // console.log("new-arr: ", { arr });
           drawCards(arr[index].status);
+          // console.log(cardDiv);
           countCards(tempStatus);
           countCards(arr[index].status);
           document.getElementById("addTask").remove();
