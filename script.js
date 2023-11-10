@@ -109,7 +109,6 @@ function createBoard(statusName, status) {
   });
   document.getElementById(id).addEventListener("drop", (event) => {
     event.preventDefault();
-    // let index = Array.from(dragMeDiv.parentNode.children).indexOf(dragMeDiv);
     let tempStatus = dragMeCard.status;
     let arr;
     let prevArr;
@@ -150,8 +149,6 @@ function createBoard(statusName, status) {
     prevArr.splice(deleteIndex, 1);
     drawCards(tempStatus);
     drawCards(arr[arr.length - 1].status);
-    // console.log(tempStatus);
-    // console.log(arr[arr.length - 1].status);
   });
   document.getElementById(id).addEventListener("dragover", (event) => {
     event.preventDefault();
@@ -235,7 +232,6 @@ function createAddTask() {
         document.getElementById("addTask").remove();
         drawCards(values[3]);
         countCards(values[3]);
-        // printCards();
       }
     }
   });
@@ -274,9 +270,7 @@ function drawCards(status) {
     </div>
     `;
     cardDiv.addEventListener("dragstart", (event) => {
-      // console.log("dragged");
       dragMeDiv = event.target;
-      // console.log(dragMe);
       let index = Array.from(dragMeDiv.parentNode.children).indexOf(dragMeDiv);
       switch (status) {
         case "toDo":
@@ -293,8 +287,6 @@ function drawCards(status) {
           break;
       }
       dragMeCard = arr[index];
-      // console.log("a", arr, dragMeCard);
-      // console.log(dragMeDiv);
     });
     let doneButton = document.createElement("button");
     doneButton.class = "doneButton";
@@ -306,7 +298,6 @@ function drawCards(status) {
       doneCards[doneCards.length - 1].status = "done";
       arr.splice(pushIndex, 1);
       cardDiv.remove();
-      // printCards();
       drawCards("done");
       countCards(tempStatus);
       countCards("done");
@@ -323,11 +314,8 @@ function drawCards(status) {
         cardDiv
       );
       let tempStatus = arr[deleteIndex].status;
-      // console.log(deleteIndex);
       cardDiv.remove();
       arr.splice(deleteIndex, 1);
-      // console.log(arr);
-      // printCards();
       countCards(tempStatus);
     });
     editNremove.appendChild(removeButton);
@@ -337,7 +325,6 @@ function drawCards(status) {
     editButton.addEventListener("click", () => {
       createAddTask();
       let index = Array.from(cardDiv.parentNode.children).indexOf(cardDiv);
-      // console.log(cardDiv);
       isEdit = true;
       switch (status) {
         case "toDo":
@@ -353,7 +340,6 @@ function drawCards(status) {
           arr = doneCards;
           break;
       }
-      // console.log(arr);
       document.getElementById("addTask").style.backgroundColor = "lightblue";
       document.querySelector("h2").innerText = "Edit Task";
       document.getElementById("addCardButton").innerText = "Edit Card";
@@ -372,16 +358,9 @@ function drawCards(status) {
           document.getElementById("descriptionInput").placeholder =
             "cannot be empty";
         } else {
-          // console.log("status: ", arr[index].status);
-          // console.log("arr: ", { arr });
-          // console.log(
-          //   arr[index].status,
-          //   document.getElementById("statusSelect").value
-          // );
           if (
             arr[index].status != document.getElementById("statusSelect").value
           ) {
-            // console.log("reach");
             arr[index].status = document.getElementById("statusSelect").value;
             switch (arr[index].status) {
               case "toDo":
@@ -413,20 +392,12 @@ function drawCards(status) {
             document.getElementById("descriptionInput").value;
           arr[index].status = document.getElementById("statusSelect").value;
           arr[index].priority = document.getElementById("prioritySelect").value;
-          // console.log(
-          //   "new-status: ",
-          //   document.getElementById("statusSelect").value
-          // );
-          // console.log("new-arr: ", { arr });
           drawCards(arr[index].status);
-          // console.log(cardDiv);
           countCards(tempStatus);
           countCards(arr[index].status);
           document.getElementById("addTask").remove();
-          // printCards();
         }
       });
-      // printCards();
     });
     editNremove.appendChild(editButton);
     document.getElementById(id).appendChild(cardDiv);
