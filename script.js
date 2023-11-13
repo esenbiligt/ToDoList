@@ -1,4 +1,8 @@
 let body = document.querySelector("body");
+let container = document.createElement("div");
+container.className = "container";
+container.id = "container";
+body.appendChild(container);
 
 let dragMeDiv;
 let dragMeCard;
@@ -30,7 +34,7 @@ function printCards() {
     console.log("done: ", doneCards);
     console.log("-----------------------------");
   });
-  body.appendChild(printCards);
+  container.appendChild(printCards);
 }
 
 function countCards(status) {
@@ -95,20 +99,21 @@ function createBoard(statusName, status) {
   let id = "cardContainer" + status;
   board.className = "board";
   board.innerHTML = `
-  <h1>${statusName}: <span id='title${status}'>0</span></h1>
+  <h1 class='boardTitle'>${statusName} <span id='title${status}' class='boardCounter'>0</span></h1>
   <div class="cardContainer" id='${id}'></div>
-  <button id="addTask${status}">Add Task</button>`;
-  body.appendChild(board);
+  <button class='addTaskButton' id="addTask${status}">Add Task</button>`;
+  container.appendChild(board);
   document.getElementById(id).classList.add("dropTarget");
   document.getElementById(`addTask${status}`).addEventListener("click", () => {
     createAddTask();
     document.getElementById("statusSelect").value = status;
   });
-  document.getElementById(id).addEventListener("dragover", (event) => {
+  board.addEventListener("dragover", (event) => {
     event.preventDefault();
   });
-  document.getElementById(id).addEventListener("drop", (event) => {
-    event.preventDefault();
+  board.addEventListener("drop", (event) => {
+    event = document.getElementById(id);
+    // console.log(event);
     let tempStatus = dragMeCard.status;
     let arr;
     let prevArr;
@@ -150,30 +155,81 @@ function createBoard(statusName, status) {
     drawCards(tempStatus);
     drawCards(arr[arr.length - 1].status);
   });
-  document.getElementById(id).addEventListener("dragover", (event) => {
+  board.addEventListener("dragover", (event) => {
     event.preventDefault();
   });
+  // document.getElementById(id).addEventListener("dragover", (event) => {
+  //   event.preventDefault();
+  // });
+  // document.getElementById(id).addEventListener("drop", (event) => {
+  //   event.preventDefault();
+  //   let tempStatus = dragMeCard.status;
+  //   let arr;
+  //   let prevArr;
+  //   switch (tempStatus) {
+  //     case "toDo":
+  //       prevArr = toDoCards;
+  //       break;
+  //     case "doing":
+  //       prevArr = doingCards;
+  //       break;
+  //     case "stuck":
+  //       prevArr = stuckCards;
+  //       break;
+  //     case "done":
+  //       prevArr = doneCards;
+  //       break;
+  //   }
+  //   let deleteIndex = prevArr.indexOf(dragMeCard);
+  //   switch (id) {
+  //     case "cardContainertoDo":
+  //       dragMeCard.status = "toDo";
+  //       arr = toDoCards;
+  //       break;
+  //     case "cardContainerdoing":
+  //       dragMeCard.status = "doing";
+  //       arr = doingCards;
+  //       break;
+  //     case "cardContainerstuck":
+  //       dragMeCard.status = "stuck";
+  //       arr = stuckCards;
+  //       break;
+  //     case "cardContainerdone":
+  //       dragMeCard.status = "done";
+  //       arr = doneCards;
+  //       break;
+  //   }
+  //   arr.push(dragMeCard);
+  //   prevArr.splice(deleteIndex, 1);
+  //   drawCards(tempStatus);
+  //   drawCards(arr[arr.length - 1].status);
+  // });
+  // document.getElementById(id).addEventListener("dragover", (event) => {
+  //   event.preventDefault();
+  // });
 }
 
 let isEdit;
 function createAddTask() {
   isEdit = false;
+  document.getElementById("container").style.filter = "brightness(40%)";
   let addTask = document.createElement("div");
+  addTask.className = "addTask";
   addTask.classList.add("form");
   addTask.id = "addTask";
 
-  addTask.innerHTML = `    <h2>Add Task</h2>
+  addTask.innerHTML = `    <h1 id='addTaskTitle' class='blue'>Add Task</h1>
   <div>
-    <label for="titleInput">Title</label>
-    <input type="text" id="titleInput" placeholder="Title" required/>
+    <label for="titleInput"><h2 class='skyBlue'>Title</h2></label>
+    <input type="text" id="titleInput" class='input' placeholder="Title" required/>
   </div>
   <div>
-    <label for="descriptionInput">Description</label>
-    <input type="text" id="descriptionInput" placeholder="Description" required/>
+    <label for="descriptionInput"><h2 class='skyBlue'>Description</h2></label>
+    <input type="text" id="descriptionInput" class='input' placeholder="Description" required/>
   </div>
   <div>
-    <label for="statusSelect">Status</label>
-    <select name="status" id="statusSelect">
+    <label for="statusSelect"><h2 class='skyBlue'>Status</h2></label>
+    <select name="status" id="statusSelect" class='input'>
       <option value="toDo">To Do</option>
       <option value="doing">Doing</option>
       <option value="stuck">Stuck</option>
@@ -181,14 +237,14 @@ function createAddTask() {
     </select>
   </div>
   <div>
-    <label for="prioritySelect">Priority</label>
-    <select name="priority" id="prioritySelect">
+    <label for="prioritySelect"><h2 class='skyBlue'>Priority</h2></label>
+    <select name="priority" id="prioritySelect" class='input'>
       <option value="high">High</option>
       <option value="medium">Medium</option>
       <option value="low">Low</option>
     </select>
   </div>
-  <button id="addCardButton">Add Card</button>`;
+  <button id="addCardButton" class='button'>Add Card</button>`;
 
   body.appendChild(addTask);
   document.getElementById("addCardButton").addEventListener("click", () => {
@@ -232,6 +288,7 @@ function createAddTask() {
         document.getElementById("addTask").remove();
         drawCards(values[3]);
         countCards(values[3]);
+        document.getElementById("container").style.filter = "brightness(100%)";
       }
     }
   });
@@ -266,7 +323,7 @@ function drawCards(status) {
     <div class='cardContent'>
       <h3>${arr[i].title}</h3>
       <p>${arr[i].description}</p>
-      <p>${arr[i].priority}</p>
+      <p class="skyBlue">${arr[i].priority}</p>
     </div>
     `;
     cardDiv.addEventListener("dragstart", (event) => {
@@ -289,8 +346,9 @@ function drawCards(status) {
       dragMeCard = arr[index];
     });
     let doneButton = document.createElement("button");
-    doneButton.class = "doneButton";
-    doneButton.innerText = "D";
+    doneButton.className = "doneButton";
+    doneButton.classList.add("button");
+    doneButton.innerText = "✓";
     doneButton.addEventListener("click", () => {
       let pushIndex = Array.from(cardDiv.parentNode.children).indexOf(cardDiv);
       let tempStatus = arr[pushIndex].status;
@@ -308,12 +366,14 @@ function drawCards(status) {
     cardDiv.appendChild(editNremove);
     let removeButton = document.createElement("button");
     removeButton.className = "removeButton";
-    removeButton.innerText = "X";
+    removeButton.classList.add("button");
+    removeButton.innerText = "x";
     removeButton.addEventListener("click", () => {
       let deleteIndex = Array.from(cardDiv.parentNode.children).indexOf(
         cardDiv
       );
       let tempStatus = arr[deleteIndex].status;
+      console.log("temp status", tempStatus);
       cardDiv.remove();
       arr.splice(deleteIndex, 1);
       countCards(tempStatus);
@@ -321,7 +381,8 @@ function drawCards(status) {
     editNremove.appendChild(removeButton);
     let editButton = document.createElement("button");
     editButton.className = "editButton";
-    editButton.innerText = "E";
+    editButton.classList.add("button");
+    editButton.innerText = "✎";
     editButton.addEventListener("click", () => {
       createAddTask();
       let index = Array.from(cardDiv.parentNode.children).indexOf(cardDiv);
@@ -341,7 +402,7 @@ function drawCards(status) {
           break;
       }
       document.getElementById("addTask").style.backgroundColor = "lightblue";
-      document.querySelector("h2").innerText = "Edit Task";
+      document.getElementById("addTaskTitle").innerText = "Edit Task";
       document.getElementById("addCardButton").innerText = "Edit Card";
       document.getElementById("titleInput").value = arr[index].title;
       document.getElementById("descriptionInput").value =
@@ -396,6 +457,8 @@ function drawCards(status) {
           countCards(tempStatus);
           countCards(arr[index].status);
           document.getElementById("addTask").remove();
+          document.getElementById("container").style.filter =
+            "brightness(100%)";
         }
       });
     });
