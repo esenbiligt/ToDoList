@@ -150,7 +150,11 @@
   height: 3vh;
   border: none;
   border-radius: 8px;
-  margin-top: 0.5vh
+  margin-top: 0.5vh;
+}
+
+input{
+  padding: 1vh;
 }
 
 .dropTarget {

@@ -424,7 +424,7 @@ function initialize() {
   for (let i = 0; i < statusList.length; i++) {
     createBoard(statusName[i], statusList[i]);
   }
-  printCards();
+  // printCards();
 }
 
 initialize();
