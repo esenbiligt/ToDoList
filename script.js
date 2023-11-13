@@ -113,7 +113,6 @@ function createBoard(statusName, status) {
   });
   board.addEventListener("drop", (event) => {
     event = document.getElementById(id);
-    // console.log(event);
     let tempStatus = dragMeCard.status;
     let arr;
     let prevArr;
@@ -158,55 +157,6 @@ function createBoard(statusName, status) {
   board.addEventListener("dragover", (event) => {
     event.preventDefault();
   });
-  // document.getElementById(id).addEventListener("dragover", (event) => {
-  //   event.preventDefault();
-  // });
-  // document.getElementById(id).addEventListener("drop", (event) => {
-  //   event.preventDefault();
-  //   let tempStatus = dragMeCard.status;
-  //   let arr;
-  //   let prevArr;
-  //   switch (tempStatus) {
-  //     case "toDo":
-  //       prevArr = toDoCards;
-  //       break;
-  //     case "doing":
-  //       prevArr = doingCards;
-  //       break;
-  //     case "stuck":
-  //       prevArr = stuckCards;
-  //       break;
-  //     case "done":
-  //       prevArr = doneCards;
-  //       break;
-  //   }
-  //   let deleteIndex = prevArr.indexOf(dragMeCard);
-  //   switch (id) {
-  //     case "cardContainertoDo":
-  //       dragMeCard.status = "toDo";
-  //       arr = toDoCards;
-  //       break;
-  //     case "cardContainerdoing":
-  //       dragMeCard.status = "doing";
-  //       arr = doingCards;
-  //       break;
-  //     case "cardContainerstuck":
-  //       dragMeCard.status = "stuck";
-  //       arr = stuckCards;
-  //       break;
-  //     case "cardContainerdone":
-  //       dragMeCard.status = "done";
-  //       arr = doneCards;
-  //       break;
-  //   }
-  //   arr.push(dragMeCard);
-  //   prevArr.splice(deleteIndex, 1);
-  //   drawCards(tempStatus);
-  //   drawCards(arr[arr.length - 1].status);
-  // });
-  // document.getElementById(id).addEventListener("dragover", (event) => {
-  //   event.preventDefault();
-  // });
 }
 
 let isEdit;
