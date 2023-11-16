@@ -153,6 +153,12 @@
   margin-top: 0.5vh;
 }
 
+.wrap
+{
+  width: 5vw;
+  word-wrap: break-word;
+}
+
 input{
   padding: 1vh;
 }

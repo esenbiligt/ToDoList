@@ -163,6 +163,7 @@ let isEdit;
 function createAddTask() {
   isEdit = false;
   document.getElementById("container").style.filter = "brightness(40%)";
+  document.getElementById("container").style.pointerEvents = "none";
   let addTask = document.createElement("div");
   addTask.className = "addTask";
   addTask.classList.add("form");
@@ -240,6 +241,7 @@ function createAddTask() {
         countCards(values[3]);
         document.getElementById("container").style.filter = "brightness(100%)";
       }
+      document.getElementById("container").style.pointerEvents = "auto";
     }
   });
 }
@@ -269,10 +271,24 @@ function drawCards(status) {
     cardDiv.className = "cardDiv";
     cardDiv.classList.add("drag");
     cardDiv.draggable = "true";
+    let titleText = arr[i].title;
+    let descriptionText = arr[i].description;
+    console.log("title ", arr[i].title.length);
+    console.log("desc ", arr[i].description.length);
+
+    if (arr[i].title.length >= 35 || arr[i].description.length >= 35) {
+      if (arr[i].title.length >= 35) {
+        titleText = titleText.substring(0, 32).concat("...");
+      }
+      if (arr[i].description.length >= 35) {
+        descriptionText = descriptionText.substring(0, 32).concat("...");
+      }
+    }
+
     cardDiv.innerHTML = `
     <div class='cardContent'>
-      <h3>${arr[i].title}</h3>
-      <p>${arr[i].description}</p>
+      <div class='wrap'><h3>${titleText}</h3></div>
+      <div class='wrap'><p>${descriptionText}</p></div>
       <p class="skyBlue">${arr[i].priority}</p>
     </div>
     `;
@@ -294,6 +310,7 @@ function drawCards(status) {
           break;
       }
       dragMeCard = arr[index];
+      console.log(dragMeCard);
     });
     let doneButton = document.createElement("button");
     doneButton.className = "doneButton";
@@ -335,6 +352,7 @@ function drawCards(status) {
     editButton.innerText = "✎";
     editButton.addEventListener("click", () => {
       createAddTask();
+      document.getElementById("container").style.pointerEvents = "none";
       let index = Array.from(cardDiv.parentNode.children).indexOf(cardDiv);
       isEdit = true;
       switch (status) {
@@ -409,6 +427,7 @@ function drawCards(status) {
           document.getElementById("addTask").remove();
           document.getElementById("container").style.filter =
             "brightness(100%)";
+          document.getElementById("container").style.pointerEvents = "auto";
         }
       });
     });
